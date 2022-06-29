@@ -1,0 +1,5 @@
+build/
+.vscode/
+.DS_Store
+datasets/sfc_pressure
+datasets/wind_pressure_200
