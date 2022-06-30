@@ -8,9 +8,10 @@
 
 int main(int argc, char** argv)
 {
-    std::string file_dir = "/Users/hanmj/Desktop/Uncertainty/LCP_C++/datasets/txt_files/wind_pressure_200/Lead_33_";
+    // std::string file_dir = "/Users/mengjiao/Desktop/Uncertainty/LCP_C++/datasets/txt_files/wind_pressure_200/Lead_33_";
+    std::string file_dir = "/home/mengjiao/Desktop/Probabilistic-Marching-Cubes-C-/datasets/txt_files/wind_pressure_200/Lead_33_";
     int num_members = 15;
-    int num_samples = 100;
+    int num_samples = 1000;
     double isovalue = 0.2;
 
     // Load data 
@@ -31,6 +32,6 @@ int main(int argc, char** argv)
     cov_matrix(data, size_x, size_y, num_members, num_samples, isovalue);
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "Runtime: " << duration.count() << " ms " << std::endl;
+    std::cout << "Runtime: " << duration.count()  << " ms " << std::endl;
     return 0;
 }

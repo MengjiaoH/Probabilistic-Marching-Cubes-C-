@@ -3,3 +3,5 @@ build/
 .DS_Store
 datasets/sfc_pressure
 datasets/wind_pressure_200
+python_version/__pycache__/
+envs/

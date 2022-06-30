@@ -31,7 +31,7 @@ def gen_ground_truth(isovalue, data):
     size_x = data.shape[1]
     size_y = data.shape[2]
     # gt = np.zeros((size_x-1, size_y-1)) # initialize the ground truth
-    temp = Parallel(n_jobs=4, backend="multiprocessing")(
+    temp = Parallel(n_jobs=-1, backend="multiprocessing")(
         delayed(calulation)(x, y, data, isovalue) for y in range(size_y - 1) for x in range(size_x - 1)
     )
     temp = np.array(temp)
@@ -55,7 +55,7 @@ def gen_ground_truth(isovalue, data):
 if __name__ == '__main__':
     # print("Number of processors: ", mp.cpu_count())
     # pool = mp.Pool(mp.cpu_count())
-    data_dir = "../datasets/wind_pressure_200/benchmark/Lead_33.npy"
+    data_dir = "../datasets/wind_pressure_200/Lead_33.npy"
     isovalue = 0.2
 
     data = np.load(data_dir)

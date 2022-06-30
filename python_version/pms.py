@@ -2,7 +2,7 @@ import numpy as np
 
 
 def pmsMultivariateGaussian(means, covMat, isovalue):
-    num_samples = 100
+    num_samples = 1000
     R = np.random.multivariate_normal(means, covMat, num_samples)
     numCrossings = 0
     for i in range(1, num_samples):
