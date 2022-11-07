@@ -1,5 +1,5 @@
 #pragma once
-#define EIGEN_DONT_PARALLELIZE 
+// #define EIGEN_DONT_PARALLELIZE 
 #include <iostream>
 #include <vector>
 #include <numeric>
@@ -79,13 +79,13 @@ void cov_matrix(std::vector<std::vector<double>> &data, int &size_x, int &size_y
     // Eigen::initParallel();
     // omp_set_dynamic(0); 
     // omp_set_num_threads(20);
-    // #pragma omp parallel for collapse(2)
+    #pragma omp parallel for collapse(2)
         // std::vector<double> probs;
-    tbb::parallel_for( tbb::blocked_range<int>(0, size_x-1), [&](tbb::blocked_range<int> r)
-    {
-        for(int j = r.begin(); j < r.end(); ++j){
-            tbb::parallel_for( tbb::blocked_range<int>(0, size_y-1), [&](tbb::blocked_range<int> t){
-                for(int i = t.begin(); i < t.end(); ++i){
+    // tbb::parallel_for( tbb::blocked_range<int>(0, size_x-1), [&](tbb::blocked_range<int> r)
+    // {
+        for(int j = 0; j < size_x -1; ++j){
+            // tbb::parallel_for( tbb::blocked_range<int>(0, size_y-1), [&](tbb::blocked_range<int> t){
+                for(int i = 0; i < size_y - 1; ++i){
                 // auto start = std::chrono::high_resolution_clock::now();
                 int index0 = size_y * j + i;
                 int index1 = index0 + size_y;
@@ -153,20 +153,20 @@ void cov_matrix(std::vector<std::vector<double>> &data, int &size_x, int &size_y
     
                 
                 // start = std::chrono::high_resolution_clock::now();
-                Eigen::EigenMultivariateNormal<double> normX_solver(mean, covar, true);
-                auto R = normX_solver.samples(num_samples).transpose();
-                int numCrossings = 0;
-                for (int n = 0; n < num_samples; ++n){
-                    if ((isovalue <= R.coeff(n, 0)) && (isovalue <= R.coeff(n, 1)) && (isovalue <= R.coeff(n, 2)) && (isovalue <= R.coeff(n, 3))){
-                        numCrossings = numCrossings + 0;
-                    }else if((isovalue >= R.coeff(n,0)) && (isovalue >= R.coeff(n,1)) && (isovalue >= R.coeff(n,2)) && (isovalue >= R.coeff(n,3))){
-                        numCrossings = numCrossings + 0;
-                    }else{
-                        numCrossings = numCrossings + 1;
-                        // std::cout << R.coeff(n, 0) << " " << R.coeff(n,1) << " " << R.coeff(n,2) << " " << R.coeff(n,3) << "\n";
-                    }
-                }
-                double p = (double) numCrossings / num_samples;
+                Eigen::EigenMultivariateNormal<double> normX_solver(mean, covar);
+                // auto R = normX_solver.samples(num_samples).transpose();
+                // int numCrossings = 0;
+                // for (int n = 0; n < num_samples; ++n){
+                //     if ((isovalue <= R.coeff(n, 0)) && (isovalue <= R.coeff(n, 1)) && (isovalue <= R.coeff(n, 2)) && (isovalue <= R.coeff(n, 3))){
+                //         numCrossings = numCrossings + 0;
+                //     }else if((isovalue >= R.coeff(n,0)) && (isovalue >= R.coeff(n,1)) && (isovalue >= R.coeff(n,2)) && (isovalue >= R.coeff(n,3))){
+                //         numCrossings = numCrossings + 0;
+                //     }else{
+                //         numCrossings = numCrossings + 1;
+                //         // std::cout << R.coeff(n, 0) << " " << R.coeff(n,1) << " " << R.coeff(n,2) << " " << R.coeff(n,3) << "\n";
+                //     }
+                // }
+                // double p = (double) numCrossings / num_samples;
 
                 // end = std::chrono::high_resolution_clock::now();
                 // duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -184,12 +184,12 @@ void cov_matrix(std::vector<std::vector<double>> &data, int &size_x, int &size_y
                 // std::cout << "Sample Prob Time: " << duration.count() << "\n";
                 // probs.push_back(p);
             }
-            });
+            // });
                
             
         }
-
-    });
+    
+    // });
         
 
     // Debug: 

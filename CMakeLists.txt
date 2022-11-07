@@ -7,7 +7,7 @@ find_package(TBB REQUIRED)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 add_executable(run main.cpp)
-target_link_libraries (run Eigen3::Eigen TBB::tbb)
+target_link_libraries (run Eigen3::Eigen TBB::tbb OpenMP::OpenMP_CXX )
 
 # if(OpenMP_CXX_FOUND)
 #     target_link_libraries(run PUBLIC OpenMP::OpenMP_CXX)

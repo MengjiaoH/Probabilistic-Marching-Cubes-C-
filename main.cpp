@@ -4,10 +4,13 @@
 #include <chrono>
 
 #include "load_data.h"
-#include "covariance.h"
+// #include "covariance.h"
+#include "cov_helper.h"
 
 int main(int argc, char** argv)
 {
+    Eigen::initParallel();
+    Eigen::setNbThreads(56);
     // std::string file_dir = "/Users/mengjiao/Desktop/Uncertainty/LCP_C++/datasets/txt_files/wind_pressure_200/Lead_33_";
     std::string file_dir = "/home/mengjiao/Desktop/Probabilistic-Marching-Cubes-C-/datasets/txt_files/wind_pressure_200/Lead_33_";
     int num_members = 15;

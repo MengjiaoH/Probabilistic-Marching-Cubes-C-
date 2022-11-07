@@ -8,31 +8,33 @@ from pms import pmsMultivariateGaussian
 # import multiprocessing as mp
 from joblib import Parallel, delayed
 
-def calulation(x, y, data, isovalue):
+def calulation(i, data, isovalue, size_y):
     ## d0, d1, d2, d3 are data at the four vertices
-    d0 = data[:, x, y]
-    d1 = data[:, x+1, y]
-    d2 = data[:, x, y+1]
-    d3 = data[:, x+1, y+1]
+    # d0 = data[:, x, y]
+    # d1 = data[:, x+1, y]
+    # d2 = data[:, x, y+1]
+    # d3 = data[:, x+1, y+1]
+    d0 = data[:, i]
+    d1 = data[:, i+size_y]
+    d2 = data[:, i+1]
+    d3 = data[:, i+size_y+1]
     out = [d0, d1, d2, d3]
     ## cov matrix
     covMat = np.cov(out)
-    # if (x == 0 and y < 2):
-    #     print(covMat)
     ## means 
     means = [np.sum(d0) / d0.shape[0], np.sum(d1) / d1.shape[0], np.sum(d2) / d2.shape[0], np.sum(d3) / d3.shape[0]]
-    if means[0] == 0 or means[1] == 0 or means[2] == 0 or means[3] == 0:
-        print(means)
-    if np.sum(d3) == 0:
-        print(d3)
     p = pmsMultivariateGaussian(means, covMat, isovalue)
+    # p = 0
     return p
-def gen_ground_truth(isovalue, data):
-    size_x = data.shape[1]
-    size_y = data.shape[2]
-    # gt = np.zeros((size_x-1, size_y-1)) # initialize the ground truth
+
+def gen_ground_truth(isovalue, data, size_x, size_y):
+    max_index = size_y * (size_x - 1 - 1) + (size_y - 1 - 1)
+    print(size_x, size_y, max_index, data.shape[1])
+    # temp = Parallel(n_jobs=1, backend="multiprocessing")(
+    #     delayed(calulation)(x, y, data, isovalue) for y in range(size_y - 1) for x in range(size_x - 1)
+    # )
     temp = Parallel(n_jobs=-1, backend="multiprocessing")(
-        delayed(calulation)(x, y, data, isovalue) for y in range(size_y - 1) for x in range(size_x - 1)
+        delayed(calulation)(i, data, isovalue, size_y) for i in range(max_index+1) if (i % size_y) != (size_y -1)
     )
     temp = np.array(temp)
     gt = np.reshape(temp, (120, 239), order='F')
@@ -59,8 +61,11 @@ if __name__ == '__main__':
     isovalue = 0.2
 
     data = np.load(data_dir)
+    new_data = []
+    for d in data:
+        new_data.append(d.flatten())
     start_time = time.time() 
-    gt = gen_ground_truth(isovalue, data)
+    gt = gen_ground_truth(isovalue, np.array(new_data), data.shape[1], data.shape[2])
     print("gt min max: ", np.min(gt), np.max(gt))
     end_time = time.time()
     print("runtime: ", end_time - start_time)
