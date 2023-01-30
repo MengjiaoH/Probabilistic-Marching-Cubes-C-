@@ -154,20 +154,7 @@ void cov_matrix(std::vector<std::vector<double>> &data, int &size_x, int &size_y
                 
                 // start = std::chrono::high_resolution_clock::now();
                 Eigen::EigenMultivariateNormal<double> normX_solver(mean, covar);
-                // auto R = normX_solver.samples(num_samples).transpose();
-                // int numCrossings = 0;
-                // for (int n = 0; n < num_samples; ++n){
-                //     if ((isovalue <= R.coeff(n, 0)) && (isovalue <= R.coeff(n, 1)) && (isovalue <= R.coeff(n, 2)) && (isovalue <= R.coeff(n, 3))){
-                //         numCrossings = numCrossings + 0;
-                //     }else if((isovalue >= R.coeff(n,0)) && (isovalue >= R.coeff(n,1)) && (isovalue >= R.coeff(n,2)) && (isovalue >= R.coeff(n,3))){
-                //         numCrossings = numCrossings + 0;
-                //     }else{
-                //         numCrossings = numCrossings + 1;
-                //         // std::cout << R.coeff(n, 0) << " " << R.coeff(n,1) << " " << R.coeff(n,2) << " " << R.coeff(n,3) << "\n";
-                //     }
-                // }
-                // double p = (double) numCrossings / num_samples;
-
+               
                 // end = std::chrono::high_resolution_clock::now();
                 // duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
                 // get_solver_time = get_solver_time + duration.count();
